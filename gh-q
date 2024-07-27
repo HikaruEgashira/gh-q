@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
+if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+    echo "Usage: gh q [get|list|code] [repo]"
+    exit 0
+fi
+
 # gh q get
-if [[ "$1" == "get" ]]; then
+elif [[ "$1" == "get" ]]; then
     if [[ "$2" == git@github.com:* || "$2" == https://github.com/* ]]; then
         repo_name=$(basename "$2" .git)
         repo_path="$HOME/ghq/github.com/${repo_name}"
