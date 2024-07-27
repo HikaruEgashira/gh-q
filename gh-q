@@ -4,10 +4,9 @@ set -e
 if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "Usage: gh q [get|list|code] [repo]"
     exit 0
-fi
 
 # gh q get
-elif [[ "$1" == "get" ]]; then
+elif [ "$1" == "get" ]; then
     if [[ "$2" == git@github.com:* || "$2" == https://github.com/* ]]; then
         repo_name=$(basename "$2" .git)
         repo_path="$HOME/ghq/github.com/${repo_name}"
@@ -24,7 +23,7 @@ elif [[ "$1" == "get" ]]; then
 
 
 # gh q list
-elif [[ "$1" == "list" ]]; then
+elif [ "$1" == "list" ]; then
     find ~/ghq -maxdepth 3 -mindepth 3 -type d -not -path '*/\.*'
 
 
