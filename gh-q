@@ -2,7 +2,10 @@
 set -e
 
 if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
-    echo "Usage: gh q [get|list|code] [repo]"
+    echo "Usage:"
+    echo "  gh q get <repo>     ... Clone a repository into ~/ghq/github.com"
+    echo "  gh q list           ... List all repositories in ~/ghq/github.com"
+    echo "  gh q *your_command* ... Search via fzf and run *your_command* in the selected directory"
     exit 0
 
 # gh q get
@@ -19,7 +22,6 @@ elif [ "$1" == "get" ]; then
     else
         echo "Repository already exists at $repo_path"
     fi
-    cd "$repo_path"
 
 
 # gh q list

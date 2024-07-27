@@ -9,7 +9,10 @@
 
 ```bash
 $ gh q --help
-Usage: gh q [get|list|code] [repo]
+Usage:
+  gh q get <repo>     ... Clone a repository into ~/ghq/github.com
+  gh q list           ... List all repositories in ~/ghq/github.com
+  gh q *your_command* ... Search via fzf and run *your_command* in the selected directory
 ```
 
 ## Usage
