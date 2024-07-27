@@ -3,7 +3,13 @@ set -e
 
 # gh q get
 if [[ "$1" == "get" ]]; then
-    repo_path="$HOME/ghq/github.com/$2"
+    if [[ "$2" == git@github.com:* || "$2" == https://github.com/* ]]; then
+        repo_name=$(basename "$2" .git)
+        repo_path="$HOME/ghq/github.com/${repo_name}"
+    else
+        repo_path="$HOME/ghq/github.com/$2"
+    fi
+
     if [ ! -d "$repo_path" ]; then
         gh repo clone "$2" "$repo_path"
     else
