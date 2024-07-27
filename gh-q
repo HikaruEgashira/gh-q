@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+# gh q get
+if [[ "$1" == "get" ]]; then
+    repo_path="$HOME/ghq/github.com/$2"
+    if [ ! -d "$repo_path" ]; then
+        gh repo clone "$2" "$repo_path"
+    else
+        echo "Repository already exists at $repo_path"
+    fi
+    cd "$repo_path"
+
+
+# gh q list
+elif [[ "$1" == "list" ]]; then
+    find ~/ghq -maxdepth 3 -mindepth 3 -type d -not -path '*/\.*'
+
+
+# gh q code -r
+else
+    selected_dir=$(gh q list | fzf)
+    if [ -n "$selected_dir" ]; then
+        exec $@ "$selected_dir"
+    fi
+fi
