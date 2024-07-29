@@ -11,7 +11,9 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 # gh q get
 elif [ "$1" == "get" ]; then
     if [[ "$2" == git@github.com:* || "$2" == https://github.com/* ]]; then
-        repo_name=$(basename "$2" .git)
+        # ex: git@github.com:owner/repo.git → owner/repo
+        # ex: https:github.com/owner/repo.git → owner/repo
+        repo_name=$(echo "$2" | sed -e 's/.*github.com[:\/]\(.*\)\.git/\1/')
         repo_path="$HOME/ghq/github.com/${repo_name}"
     else
         repo_path="$HOME/ghq/github.com/$2"
