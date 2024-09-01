@@ -26,3 +26,40 @@ gh q get HikaruEgashira/gh-q
 ## Acknowledgements
 
 - https://docs.github.com/ja/github-cli/github-cli/creating-github-cli-extensions
+
+# 日本語版 gh-qについて
+
+```bash
+$ gh q --help
+Usage:
+  gh q get <repo>     ... リポジトリを~/ghq/github.comにクローン
+  gh q list           ... ~/ghq/github.comにある全リポジトリを表示
+  gh q *your_command* ... fzfで検索し、選択したディレクトリで*your_command*を実行
+```
+
+- インストール
+
+```bash
+gh extension install HikaruEgashira/gh-q
+```
+
+## 使い方
+
+
+- 対象リポジトリをクローンする
+
+```bash
+gh q get HikaruEgashira/gh-q
+```
+
+- プロジェクトをVSCodeで開く
+
+```bash
+gh q code
+```
+
+- オプション付きでコマンドを実行する
+
+```bash
+gh q code -r # fzfで曖昧検索した後 code -r <選択したリポジトリ>を実行
+```
