@@ -57,7 +57,3 @@ gh q get HikaruEgashira/gh-q
 ## Related Projects
 
 - [gh-wt](https://github.com/HikaruEgashira/gh-wt) - Git worktree management extension for GitHub CLI
-
-## Acknowledgements
-
-- https://docs.github.com/ja/github-cli/github-cli/creating-github-cli-extensions
