@@ -29,7 +29,7 @@ elif [ "$1" == "get" ]; then
 
 # gh q list
 elif [ "$1" == "list" ]; then
-    find ~/ghq -maxdepth 3 -mindepth 3 -type d -not -path '*/\.*'
+    find ~/ghq -maxdepth 3 -mindepth 3 -type d -not -path '*/\.*' -not -path '*/.git/worktrees*'
 
 
 # gh q -- <command>
