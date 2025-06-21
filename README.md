@@ -38,7 +38,7 @@ gh q ls -la      # Lists files in the selected directory
 ### Directory Change Mode: `gh q -- <command>`
 Changes to the selected directory first, then executes the command.
 ```bash
-gh q -- git status    # Runs git status in the selected directory
+gh q -- claude        # Run Claude Code in the selected directory
 gh q -- npm test      # Runs npm test in the selected directory
 ```
 
