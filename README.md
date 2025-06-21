@@ -54,6 +54,15 @@ gh extension install HikaruEgashira/gh-q
 gh q get HikaruEgashira/gh-q
 ```
   
-## Related Projects
+## Integration with other gh extensions
 
-- [gh-wt](https://github.com/HikaruEgashira/gh-wt) - Git worktree management extension for GitHub CLI
+Works well with:
+- [`gh-wt`](https://github.com/HikaruEgashira/gh-wt): Git worktree management
+- [`gh-ws`](https://github.com/HikaruEgashira/gh-ws): VSCode workspace management with worktrees
+
+```bash
+# Example workflow
+gh q                    # Select repository
+gh wt add feature/new   # Create new worktree
+gh ws init              # Create/update workspace
+```
