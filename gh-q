@@ -5,7 +5,8 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "Usage:"
     echo "  gh q get <repo>     ... Clone a repository into ~/ghq/github.com"
     echo "  gh q list           ... List all repositories in ~/ghq/github.com"
-    echo "  gh q *your_command* ... Search via fzf and run *your_command* in the selected directory"
+    echo "  gh q -- <command>   ... Search via fzf and run <command> in the selected directory"
+    echo "  gh q <command>      ... Search via fzf and run <command> with selected directory as argument"
     exit 0
 
 # gh q get
@@ -31,10 +32,19 @@ elif [ "$1" == "list" ]; then
     find ~/ghq -maxdepth 3 -mindepth 3 -type d -not -path '*/\.*'
 
 
-# gh q code -r
+# gh q -- <command>
+elif [ "$1" == "--" ]; then
+    shift  # Remove the "--" from arguments
+    selected_dir=$(gh q list | fzf)
+    if [ -n "$selected_dir" ]; then
+        cd "$selected_dir"
+        exec "$@"
+    fi
+
+# gh q <command>
 else
     selected_dir=$(gh q list | fzf)
     if [ -n "$selected_dir" ]; then
-        exec $@ "$selected_dir"
+        exec "$@" "$selected_dir"
     fi
 fi
