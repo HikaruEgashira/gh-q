@@ -38,7 +38,11 @@ elif [ "$1" == "--" ]; then
     selected_dir=$(gh q list | fzf)
     if [ -n "$selected_dir" ]; then
         cd "$selected_dir"
-        exec "$@"
+        if [ $# -eq 0 ]; then
+            exec "$SHELL"
+        else
+            exec "$@"
+        fi
     fi
 
 # gh q <command>
