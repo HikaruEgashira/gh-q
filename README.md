@@ -14,6 +14,8 @@ $ gh q --help
 Usage:
   gh q get <repo>     ... Clone a repository into ~/ghq/github.com
   gh q list           ... List all repositories in ~/ghq/github.com
+  gh q clean [--days N] [--dry-run]
+                     ... Delete repos with no local activity for N days (default 15) under ~/ghq
   gh q -- <command>   ... Search via fzf and run <command> in the selected directory
   gh q <command>      ... Search via fzf and run <command> with selected directory as argument
 
@@ -22,6 +24,8 @@ $ gh q --help
 Usage:
   gh q get <repo>     ... リポジトリを~/ghq/github.comにクローン
   gh q list           ... ~/ghq/github.comにある全リポジトリを表示
+  gh q clean [--days N] [--dry-run]
+                     ... ローカル活動がN日以上ないリポジトリを ~/ghq から削除 (デフォルト15日)
   gh q -- <command>   ... fzfで検索し、選択したディレクトリで<command>を実行
   gh q <command>      ... fzfで検索し、選択したディレクトリを引数として<command>を実行
 ```
