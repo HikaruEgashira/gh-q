@@ -15,7 +15,7 @@ Usage:
   gh q get <repo>     ... Clone a repository into ~/ghq/github.com
   gh q list           ... List all repositories in ~/ghq/github.com
   gh q clean [--days N] [--dry-run]
-                     ... Clean generated artifacts in ~/ghq older than N days (default 15)
+                     ... Per-repo cleanup: if repo inactive for N days (default 15), remove generated artifacts inside it
   gh q -- <command>   ... Search via fzf and run <command> in the selected directory
   gh q <command>      ... Search via fzf and run <command> with selected directory as argument
 
@@ -25,7 +25,7 @@ Usage:
   gh q get <repo>     ... リポジトリを~/ghq/github.comにクローン
   gh q list           ... ~/ghq/github.comにある全リポジトリを表示
   gh q clean [--days N] [--dry-run]
-                     ... ~/ghq配下の生成物をN日より古いものだけ削除 (デフォルト15日)
+                     ... リポジトリ単位のクリーン: 最終活動がN日以上前のリポジトリ内の生成物を削除 (デフォルト15日)
   gh q -- <command>   ... fzfで検索し、選択したディレクトリで<command>を実行
   gh q <command>      ... fzfで検索し、選択したディレクトリを引数として<command>を実行
 ```
