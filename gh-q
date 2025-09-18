@@ -6,7 +6,7 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "  gh q get <repo>     ... Clone a repository into ~/ghq/github.com"
     echo "  gh q list           ... List all repositories in ~/ghq/github.com"
     echo "  gh q clean [--days N] [--dry-run]"
-    echo "                     ... Delete entire repos inactive for N days (default 15) under ~/ghq"
+    echo "                     ... Delete repos with no local activity for N days (default 15) under ~/ghq"
     echo "  gh q -- <command>   ... Search via fzf and run <command> in the selected directory"
     echo "  gh q <command>      ... Search via fzf and run <command> with selected directory as argument"
     exit 0
@@ -51,8 +51,8 @@ elif [ "$1" == "clean" ]; then
                 DRY_RUN=1; shift ;;
             -h|--help)
                 echo "Usage: gh q clean [--days N] [--dry-run]";
-                echo "  Cleans generated artifacts under ~/ghq older than N days (default 15).";
-                echo "  Targets: node_modules, dist, build, out, .next, .nuxt, .cache, .gradle, .terraform, target, .venv, venv, .tox, __pycache__, .pytest_cache, .mypy_cache, coverage, .parcel-cache, .yarn/cache, .yarn/unplugged, Pods";
+                echo "  Removes git repositories under ~/ghq whose local activity is older than N days (default 15).";
+                echo "  Local activity is based on mtimes of .git metadata such as FETCH_HEAD and index.";
                 exit 0 ;;
             *)
                 echo "Unknown option: $1" >&2; exit 1 ;;
@@ -68,26 +68,26 @@ elif [ "$1" == "clean" ]; then
     NOW_EPOCH=$(date +%s)
     CUTOFF_EPOCH=$(( NOW_EPOCH - DAYS * 86400 ))
 
-    # Helper to get repo last activity epoch
+    # Helper to get repo last local activity epoch
     get_repo_epoch() {
         local repo="$1"
-        local ts=""
-        ts=$(git -C "$repo" log -1 --format=%ct 2>/dev/null || true)
-        if [ -n "$ts" ]; then
-            echo "$ts"; return 0
-        fi
-        # Fallback to directory mtime (BSD/GNU stat)
-        if stat -f %m "$repo" >/dev/null 2>&1; then
-            stat -f %m "$repo"
-        elif stat -c %Y "$repo" >/dev/null 2>&1; then
-            stat -c %Y "$repo"
-        else
-            echo 0
-        fi
+        local candidate=""
+        for candidate in "$repo/.git/FETCH_HEAD" "$repo/.git/index" "$repo/.git/HEAD" "$repo/.git/logs/HEAD" "$repo/.git" "$repo"; do
+            [ -e "$candidate" ] || continue
+            if stat -f %m "$candidate" >/dev/null 2>&1; then
+                stat -f %m "$candidate"
+                return 0
+            elif stat -c %Y "$candidate" >/dev/null 2>&1; then
+                stat -c %Y "$candidate"
+                return 0
+            fi
+        done
+        echo 0
     }
 
     echo "Scanning $ROOT repositories; deleting repos inactive for $DAYS days..."
 
+    REPOS_MARKED=0
     REPOS_REMOVED=0
 
     # Reuse gh q list to enumerate repos
@@ -100,6 +100,8 @@ elif [ "$1" == "clean" ]; then
             continue
         fi
 
+        REPOS_MARKED=$((REPOS_MARKED+1))
+
         if [ $DRY_RUN -eq 1 ]; then
             echo "Would delete repo: $repo"
         else
@@ -110,10 +112,10 @@ elif [ "$1" == "clean" ]; then
     done < <(gh q list)
 
     if [ $DRY_RUN -eq 1 ]; then
-        if [ $REPOS_REMOVED -eq 0 ]; then
+        if [ $REPOS_MARKED -eq 0 ]; then
             echo "No inactive repositories found for deletion."
         else
-            echo "Dry-run complete. $REPOS_REMOVED repos would be deleted."
+            echo "Dry-run complete. $REPOS_MARKED repos would be deleted."
         fi
     else
         if [ $REPOS_REMOVED -eq 0 ]; then
