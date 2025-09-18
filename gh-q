@@ -6,7 +6,7 @@ if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "  gh q get <repo>     ... Clone a repository into ~/ghq/github.com"
     echo "  gh q list           ... List all repositories in ~/ghq/github.com"
     echo "  gh q clean [--days N] [--dry-run]"
-    echo "                     ... Per-repo cleanup: if repo inactive for N days (default 15), remove generated artifacts inside it"
+    echo "                     ... Delete entire repos inactive for N days (default 15) under ~/ghq"
     echo "  gh q -- <command>   ... Search via fzf and run <command> in the selected directory"
     echo "  gh q <command>      ... Search via fzf and run <command> with selected directory as argument"
     exit 0
@@ -64,41 +64,6 @@ elif [ "$1" == "clean" ]; then
         echo "Not found: $ROOT" >&2; exit 1
     fi
 
-    TARGETS=(
-        node_modules
-        dist
-        build
-        out
-        .next
-        .nuxt
-        .cache
-        .gradle
-        .terraform
-        target
-        .venv
-        venv
-        .tox
-        __pycache__
-        .pytest_cache
-        .mypy_cache
-        coverage
-        .parcel-cache
-        Pods
-        .yarn
-    )
-
-    name_expr=()
-    for n in "${TARGETS[@]}"; do
-        if [ ${#name_expr[@]} -gt 0 ]; then
-            name_expr+=( -o )
-        fi
-        if [ "$n" = ".yarn" ]; then
-            name_expr+=( \( -path "*/.yarn/cache" -o -path "*/.yarn/unplugged" \) )
-        else
-            name_expr+=( -name "$n" )
-        fi
-    done
-
     # Compute cutoff epoch: now - DAYS*86400 (portable)
     NOW_EPOCH=$(date +%s)
     CUTOFF_EPOCH=$(( NOW_EPOCH - DAYS * 86400 ))
@@ -121,10 +86,9 @@ elif [ "$1" == "clean" ]; then
         fi
     }
 
-    echo "Scanning $ROOT repositories; cleaning those inactive for $DAYS days..."
+    echo "Scanning $ROOT repositories; deleting repos inactive for $DAYS days..."
 
-    REPOS_CLEANED=0
-    DIRS_REMOVED=0
+    REPOS_REMOVED=0
 
     # Reuse gh q list to enumerate repos
     while IFS= read -r repo; do
@@ -136,39 +100,26 @@ elif [ "$1" == "clean" ]; then
             continue
         fi
 
-        # Build list of target directories within this repo
-        mapfile -t candidates < <(eval find "\"$repo\"" -type d \( ${name_expr[@]} \) -prune -print)
-        if [ ${#candidates[@]} -eq 0 ]; then
-            continue
-        fi
-
-        REPOS_CLEANED=$((REPOS_CLEANED+1))
         if [ $DRY_RUN -eq 1 ]; then
-            echo "Repo (inactive): $repo"
-            for d in "${candidates[@]}"; do
-                echo "  would remove: $d"
-            done
+            echo "Would delete repo: $repo"
         else
-            echo "Repo (inactive): $repo"
-            for d in "${candidates[@]}"; do
-                echo "  removing: $d"
-                rm -rf "$d"
-                DIRS_REMOVED=$((DIRS_REMOVED+1))
-            done
+            echo "Deleting repo: $repo"
+            rm -rf "$repo"
+            REPOS_REMOVED=$((REPOS_REMOVED+1))
         fi
     done < <(gh q list)
 
     if [ $DRY_RUN -eq 1 ]; then
-        if [ $REPOS_CLEANED -eq 0 ]; then
-            echo "No inactive repositories found for cleanup."
+        if [ $REPOS_REMOVED -eq 0 ]; then
+            echo "No inactive repositories found for deletion."
         else
-            echo "Dry-run complete. $REPOS_CLEANED repos would be cleaned."
+            echo "Dry-run complete. $REPOS_REMOVED repos would be deleted."
         fi
     else
-        if [ $REPOS_CLEANED -eq 0 ]; then
-            echo "No inactive repositories found for cleanup."
+        if [ $REPOS_REMOVED -eq 0 ]; then
+            echo "No inactive repositories found for deletion."
         else
-            echo "Cleanup complete. Cleaned $REPOS_CLEANED repos, removed $DIRS_REMOVED directories."
+            echo "Cleanup complete. Deleted $REPOS_REMOVED repositories."
         fi
     fi
 
