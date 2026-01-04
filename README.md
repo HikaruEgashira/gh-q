@@ -7,58 +7,44 @@
 🔹<a  href="https://github.com/HikaruEgashira/gh-q/issues">Request Feature</a>
 </h3>
 
-
-
 ```bash
 $ gh q --help
 Usage:
   gh q get <repo>     ... Clone a repository into ~/ghq/github.com
   gh q list           ... List all repositories in ~/ghq/github.com
-  gh q clean [--days N] [--dry-run]
-                     ... Delete repos with no local activity for N days (default 15) under ~/ghq
-  gh q -- <command>   ... Search via fzf and run <command> in the selected directory
   gh q <command>      ... Search via fzf and run <command> with selected directory as argument
-
-
-$ gh q --help
-Usage:
-  gh q get <repo>     ... リポジトリを~/ghq/github.comにクローン
-  gh q list           ... ~/ghq/github.comにある全リポジトリを表示
-  gh q clean [--days N] [--dry-run]
-                     ... ローカル活動がN日以上ないリポジトリを ~/ghq から削除 (デフォルト15日)
-  gh q -- <command>   ... fzfで検索し、選択したディレクトリで<command>を実行
-  gh q <command>      ... fzfで検索し、選択したディレクトリを引数として<command>を実行
 ```
-
-## Command Execution Modes
-
-### Path Argument Mode: `gh q <command>`
-Passes the selected directory path as an argument to the command.
-```bash
-gh q code        # Opens VS Code with the selected directory
-gh q ls -la      # Lists files in the selected directory
-```
-
-### Directory Change Mode: `gh q -- <command>`
-Changes to the selected directory first, then executes the command.
-```bash
-gh q -- claude        # Run Claude Code in the selected directory
-gh q -- npm test      # Runs npm test in the selected directory
-```
-
-## Blog post
-
-[[gh-q] gh extensionでghqを置き換える - Zenn](https://zenn.dev/sqer/articles/4bfc05e7ec4eb4)
 
 ## Usage
 
 ```bash
 # Install
 gh extension install HikaruEgashira/gh-q
-gh q get HikaruEgashira/gh-q
+
+# ghq get owner/repo equivalent to
+gh q get owner/repo
 ```
-  
-## Integration with other gh extensions
+
+## fzf Native Integration
+
+### Path Argument Mode
+Passes the selected directory path as an argument to the command.
+```bash
+gh q code        # Opens VS Code with the selected directory
+```
+
+### Directory Change Mode
+Changes to the selected directory first, then executes the command.
+```bash
+gh q -- claude        # Run Claude Code in the selected directory
+gh q --               # Opens a shell in the selected directory
+```
+
+## Blog post
+
+[[gh-q] gh extensionでghqを置き換える - Zenn](https://zenn.dev/sqer/articles/4bfc05e7ec4eb4)
+
+## Acknowledgements
 
 Works well with:
 - [`gh-wt`](https://github.com/HikaruEgashira/gh-wt): Git worktree management
