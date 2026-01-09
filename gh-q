@@ -1,35 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
     echo "Usage:"
     echo "  gh q get <repo>           ... Clone a repository into ~/ghq/github.com"
     echo "  gh q list                 ... List all repositories in ~/ghq/github.com"
-    echo "  gh q completion <shell>   ... Output shell completion script (bash|zsh|fish)"
     echo "  gh q -- <command>         ... Search via fzf and run <command> in the selected directory"
     echo "  gh q <command>            ... Search via fzf and run <command> with selected directory as argument"
-    exit 0
-
-# gh q completion
-elif [ "$1" == "completion" ]; then
-    case "$2" in
-        bash)
-            cat "$SCRIPT_DIR/completions/gh-q.bash"
-            ;;
-        zsh)
-            cat "$SCRIPT_DIR/completions/_gh-q"
-            ;;
-        fish)
-            cat "$SCRIPT_DIR/completions/gh-q.fish"
-            ;;
-        *)
-            echo "Usage: gh q completion <shell>" >&2
-            echo "Available shells: bash, zsh, fish" >&2
-            exit 1
-            ;;
-    esac
     exit 0
 
 # gh q get
