@@ -27,22 +27,15 @@ gh q get owner/repo
 
 ## Shell Completion
 
-### Zsh
 ```bash
-# Add to ~/.zshrc
-source ~/.local/share/gh/extensions/gh-q/completions/_gh-q
-```
+# Zsh - Add to ~/.zshrc
+source <(gh q completion zsh)
 
-### Bash
-```bash
-# Add to ~/.bashrc
-source ~/.local/share/gh/extensions/gh-q/completions/gh-q.bash
-```
+# Bash - Add to ~/.bashrc
+source <(gh q completion bash)
 
-### Fish
-```bash
-# Copy to fish completions directory
-cp ~/.local/share/gh/extensions/gh-q/completions/gh-q.fish ~/.config/fish/completions/gh.fish
+# Fish - Run once
+gh q completion fish > ~/.config/fish/completions/gh-q.fish
 ```
 
 ## fzf Native Integration
