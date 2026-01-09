@@ -1,0 +1,59 @@
+#compdef _gh_q
+
+# Completion for gh-q (GitHub CLI extension)
+# Usage: Add to fpath and source, or use the wrapper function
+
+_gh_q_repos() {
+  local -a repos
+  repos=(${(f)"$(gh api user/repos --jq '.[].full_name' 2>/dev/null)"})
+  _describe -t repos 'repository' repos
+}
+
+_gh_q_complete() {
+  local context state state_descr line
+  typeset -A opt_args
+
+  _arguments -C \
+    '1: :->command' \
+    '*: :->args'
+
+  case $state in
+    command)
+      local -a commands
+      commands=(
+        'get:Clone a repository'
+        'list:List repositories'
+        '--:Change directory and run command'
+      )
+      _describe -t commands 'command' commands
+      _command_names -e
+      ;;
+    args)
+      case $words[2] in
+        get)
+          _gh_q_repos
+          ;;
+        list)
+          ;;
+        --)
+          shift words
+          (( CURRENT-- ))
+          _normal
+          ;;
+        *)
+          ;;
+      esac
+      ;;
+  esac
+}
+
+# Wrapper function for "gh q" completion
+_gh_q() {
+  # Shift "gh" from words array
+  words=("gh-q" "${words[@]:2}")
+  (( CURRENT-- ))
+  _gh_q_complete
+}
+
+# Register completion
+compdef _gh_q 'gh q'
