@@ -25,6 +25,26 @@ gh extension install HikaruEgashira/gh-q
 gh q get owner/repo
 ```
 
+## Shell Completion
+
+### Zsh
+```bash
+# Add to ~/.zshrc
+source ~/.local/share/gh/extensions/gh-q/completions/_gh-q
+```
+
+### Bash
+```bash
+# Add to ~/.bashrc
+source ~/.local/share/gh/extensions/gh-q/completions/gh-q.bash
+```
+
+### Fish
+```bash
+# Copy to fish completions directory
+cp ~/.local/share/gh/extensions/gh-q/completions/gh-q.fish ~/.config/fish/completions/gh.fish
+```
+
 ## fzf Native Integration
 
 ### Path Argument Mode
