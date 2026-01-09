@@ -1,8 +1,5 @@
 #compdef _gh_q
 
-# Completion for gh-q (GitHub CLI extension)
-# Usage: Add to fpath and source, or use the wrapper function
-
 _gh_q_repos() {
   local -a repos
   repos=(${(f)"$(gh api user/repos --jq '.[].full_name' 2>/dev/null)"})
