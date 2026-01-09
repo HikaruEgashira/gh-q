@@ -1,6 +1,3 @@
-# Completion for gh-q (GitHub CLI extension)
-# Usage: source this file in ~/.bashrc
-
 _gh_q_repos() {
   gh api user/repos --jq '.[].full_name' 2>/dev/null
 }
@@ -9,7 +6,6 @@ _gh_q_complete() {
   local cur prev words cword
   _init_completion || return
 
-  # For "gh q", we need to check position relative to "q"
   local cmd_index=1
   if [[ "${words[0]}" == "gh" && "${words[1]}" == "q" ]]; then
     cmd_index=2
@@ -41,14 +37,8 @@ _gh_q_complete() {
   esac
 }
 
-# Wrapper for "gh q" completion
 _gh_q() {
-  # Check if we're completing "gh q ..."
-  if [[ "${COMP_WORDS[0]}" == "gh" && "${COMP_WORDS[1]}" == "q" ]]; then
-    _gh_q_complete
-  else
-    _gh_q_complete
-  fi
+  _gh_q_complete
 }
 
 complete -F _gh_q gh-q
