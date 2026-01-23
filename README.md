@@ -25,19 +25,6 @@ gh extension install HikaruEgashira/gh-q
 gh q get owner/repo
 ```
 
-## Shell Completion
-
-```bash
-# Zsh - Add to ~/.zshrc
-source <(gh q completion zsh)
-
-# Bash - Add to ~/.bashrc
-source <(gh q completion bash)
-
-# Fish - Run once
-gh q completion fish > ~/.config/fish/completions/gh-q.fish
-```
-
 ## fzf Native Integration
 
 ### Path Argument Mode
@@ -59,13 +46,4 @@ gh q --               # Opens a shell in the selected directory
 
 ## Acknowledgements
 
-Works well with:
 - [`gh-wt`](https://github.com/HikaruEgashira/gh-wt): Git worktree management
-- [`gh-ws`](https://github.com/HikaruEgashira/gh-ws): VSCode workspace management with worktrees
-
-```bash
-# Example workflow
-gh q                    # Select repository
-gh wt add feature/new   # Create new worktree
-gh ws init              # Create/update workspace
-```
