@@ -9,10 +9,8 @@
 </h3>
 
 #### Example
+Install: `gh extension install HikaruEgashira/gh-q`
 ```bash
-# Install
-gh extension install HikaruEgashira/gh-q
-
 # ghq get owner/repo equivalent to
 gh q get owner/repo
 ```
