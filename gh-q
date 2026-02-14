@@ -14,7 +14,7 @@ elif [ "$1" == "get" ]; then
     if [[ "$2" == git@github.com:* || "$2" == https://github.com/* ]]; then
         # ex: git@github.com:owner/repo.git → owner/repo
         # ex: https:github.com/owner/repo.git → owner/repo
-        repo_name=$(echo "$2" | sed -e 's/.*github.com[:\/]\(.*\)\.git/\1/')
+        repo_name=$(echo "$2" | sed -e 's/.*github.com[:\/]//' -e 's/\.git$//' -e 's/\/$//')
         repo_path="$HOME/ghq/github.com/${repo_name}"
     else
         repo_path="$HOME/ghq/github.com/$2"
